@@ -1,0 +1,4 @@
+{
+	"terminal.integrated.cwd": "functions",
+	"biome.lspBin": "functions/node_modules/.bin/biome",
+}

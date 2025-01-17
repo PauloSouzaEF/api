@@ -1,0 +1,16 @@
+# @name login
+
+POST http://localhost:5000/login HTTP/1.3
+Content-Type: application/json
+
+{
+	"email": "teste@email.com",
+	"password": "teste123"
+}
+
+###
+
+GET http://localhost:5000/dashboard HTTP/1.3
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+x-account-id: 67707cf16a3473044e3e754e
