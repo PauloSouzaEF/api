@@ -10,6 +10,7 @@ const createEventBodySchema = z.object({
 	dateTime: z.coerce.date(),
 	address: z.string().min(1),
 	shouldNotifyWhatsappWhenNear: z.boolean(),
+	whatsappNotificationDateTime: z.coerce.date().optional(),
 	income: z.number().min(1),
 	expense: z.number().min(1),
 	suppliers: z.array(
@@ -18,7 +19,7 @@ const createEventBodySchema = z.object({
 			type: z.string().min(1),
 			value: z.number().min(1),
 			quantity: z.number().min(1),
-		}),
+		})
 	),
 });
 
@@ -30,6 +31,7 @@ export class CreateEventController {
 			dateTime,
 			address,
 			shouldNotifyWhatsappWhenNear,
+			whatsappNotificationDateTime,
 			income,
 			expense,
 			suppliers,
@@ -52,6 +54,7 @@ export class CreateEventController {
 			dateTime: dateTime.getTime(),
 			address,
 			shouldNotifyWhatsappWhenNear,
+			whatsappNotificationDateTime,
 			income,
 			expense,
 			suppliers,
