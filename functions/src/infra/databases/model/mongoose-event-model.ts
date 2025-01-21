@@ -12,7 +12,7 @@ export interface Event {
 	dateTime: Date;
 	address: string;
 	shouldNotifyWhatsappWhenNear: boolean;
-	whatsappNotificationDateTime?: Date;
+	whatsAppNotificationDateTime?: Date;
 	suppliers: Supplier[];
 	income: number;
 	expense: number;
@@ -38,7 +38,7 @@ const eventSchema = new Schema<Event>({
 	income: { type: Number, required: true },
 	expense: { type: Number, required: true },
 	shouldNotifyWhatsappWhenNear: { type: Boolean, required: true },
-	whatsappNotificationDateTime: { type: Date, required: false },
+	whatsAppNotificationDateTime: { type: Date, required: false },
 	dateTime: {
 		type: Date,
 		required: true,

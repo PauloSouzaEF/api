@@ -23,6 +23,7 @@ export class FetchByIdEventController {
 			dateTime: event.dateTime,
 			address: event.address,
 			shouldNotifyWhatsappWhenNear: event.shouldNotifyWhatsappWhenNear,
+			whatsAppNotificationDateTime: event.whatsAppNotificationDateTime,
 			suppliers: event.suppliers.map((supplier) => ({
 				name: supplier.name,
 				type: supplier.type,

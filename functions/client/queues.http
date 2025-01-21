@@ -1,0 +1,8 @@
+POST http://127.0.0.1:5001/event-facil-prd/us-central1/queues-notifyWhatsappEventQueue
+Content-Type: application/json
+
+{
+	"data": {
+		"eventId": "123"
+	}
+}

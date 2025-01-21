@@ -10,7 +10,7 @@ const updateEventBodySchema = z.object({
 	dateTime: z.coerce.date(),
 	address: z.string().min(1),
 	shouldNotifyWhatsappWhenNear: z.boolean(),
-	whatsappNotificationDateTime: z.date().optional(),
+	whatsAppNotificationDateTime: z.coerce.date().optional(),
 	income: z.number().min(1),
 	expense: z.number().min(1),
 	suppliers: z.array(
@@ -32,7 +32,7 @@ export class UpdateEventController {
 			dateTime,
 			address,
 			shouldNotifyWhatsappWhenNear,
-			whatsappNotificationDateTime,
+			whatsAppNotificationDateTime,
 			income,
 			expense,
 			suppliers,
@@ -57,10 +57,10 @@ export class UpdateEventController {
 			{
 				$set: {
 					name,
-					dateTime,
+					dateTime: dateTime.getTime(),
 					address,
 					shouldNotifyWhatsappWhenNear,
-					whatsappNotificationDateTime,
+					whatsAppNotificationDateTime: whatsAppNotificationDateTime?.getTime(),
 					income,
 					expense,
 					suppliers,
