@@ -17,16 +17,16 @@ export function getApiServerConfiguration() {
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 
-	app.use(routes);
+	void loadMongodbConnection();
 
-	loadMongodbConnection();
+	app.use(routes);
 
 	app.use(
 		(
 			error: unknown,
 			_request: Request,
 			response: Response,
-			_next: NextFunction,
+			_next: NextFunction
 		) => {
 			if (error instanceof ZodError) {
 				const validationErrors = fromZodError(error);
@@ -38,10 +38,6 @@ export function getApiServerConfiguration() {
 					};
 				});
 
-				// logger.warn("on request error, validation error", {
-				// 	issues,
-				// });
-
 				return response.status(HttpStatusCode.Conflict).send({
 					message: "Validation Error",
 					issues,
@@ -49,9 +45,7 @@ export function getApiServerConfiguration() {
 			}
 
 			if (error instanceof AppError) {
-				const { message, payload, statusCode } = error;
-
-				// void logger.error(message, payload);
+				const { message, statusCode } = error;
 
 				return response.status(statusCode).json({
 					errors: {
@@ -65,7 +59,7 @@ export function getApiServerConfiguration() {
 			return response.status(HttpStatusCode.InternalServerError).json({
 				message: "Internal server error",
 			});
-		},
+		}
 	);
 
 	return app;
