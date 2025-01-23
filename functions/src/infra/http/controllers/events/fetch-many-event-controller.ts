@@ -5,14 +5,8 @@ import { z } from "zod";
 
 const fetchManyEventQuerySchema = z.object({
 	query: z.string().optional(),
-	limit: z
-		.coerce
-		.number({ message: 'Limit must be a number' })
-		.default(30),
-	page: z
-		.coerce
-		.number({ message: 'Page must be a number' })
-		.default(1),
+	limit: z.coerce.number({ message: "Limit must be a number" }).default(30),
+	page: z.coerce.number({ message: "Page must be a number" }).default(1),
 });
 
 export class FetchManyEventController {

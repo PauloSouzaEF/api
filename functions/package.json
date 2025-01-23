@@ -5,7 +5,8 @@
     "build:watch": "tsup --watch",
     "stopall": "lsof -t -i:5000 -i:5002 -i:5009 -i:8089 | xargs kill -9",
     "start:emulators": "firebase emulators:start --only functions,tasks,hosting",
-    "deploy": "firebase deploy --only functions"
+    "deploy": "firebase deploy --only functions",
+    "lint": "eslint \"**/*.ts\" --fix"
   },
   "engines": {
     "node": "22"

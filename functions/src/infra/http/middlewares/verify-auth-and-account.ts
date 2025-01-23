@@ -1,6 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { getEnvVariables } from "@/env";
-import logInfo from "@/infra/libs/logs/log-info";
 import type { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 

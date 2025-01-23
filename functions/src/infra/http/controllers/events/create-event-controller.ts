@@ -19,7 +19,7 @@ const createEventBodySchema = z.object({
 			type: z.string().min(1),
 			value: z.number().min(1),
 			quantity: z.number().min(1),
-		})
+		}),
 	),
 });
 
@@ -52,7 +52,9 @@ export class CreateEventController {
 		await MongooseEventModel.create({
 			name,
 			dateTime: dateTime.getTime(),
-			whatsAppNotificationDateTime: whatsAppNotificationDateTime && new Date(whatsAppNotificationDateTime).getTime(),
+			whatsAppNotificationDateTime:
+				whatsAppNotificationDateTime &&
+				new Date(whatsAppNotificationDateTime).getTime(),
 			address,
 			shouldNotifyWhatsappWhenNear,
 			income,

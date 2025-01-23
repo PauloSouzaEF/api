@@ -7,14 +7,20 @@ import { UpdateEventController } from "../controllers/events/update-event-contro
 
 export const eventsRouter = Router();
 
-eventsRouter.post("/events", (request, response) => CreateEventController.handle(request, response));
+eventsRouter.post("/events", (request, response) =>
+	CreateEventController.handle(request, response),
+);
 
-eventsRouter.get("/events", (request, response) => FetchManyEventController.handle(request, response));
+eventsRouter.get("/events", (request, response) =>
+	FetchManyEventController.handle(request, response),
+);
 eventsRouter.get("/events/:eventId", (request, response) =>
 	FetchByIdEventController.handle(request, response),
 );
 
-eventsRouter.put("/events/:eventId", (request, response) => UpdateEventController.handle(request, response));
+eventsRouter.put("/events/:eventId", (request, response) =>
+	UpdateEventController.handle(request, response),
+);
 
 eventsRouter.delete("/events/:eventId", (request, response) =>
 	DeleteEventController.handle(request, response),

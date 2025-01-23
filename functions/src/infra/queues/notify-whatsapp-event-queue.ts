@@ -26,7 +26,7 @@ interface SendWhatsAppMessageProps {
 
 class NotifyWhatsAppEventQueueUtils {
 	static formatDateTime(dateTime: Date) {
-		return format(dateTime, "dd/MM/yyyy 'às' HH:mm")
+		return format(dateTime, "dd/MM/yyyy 'às' HH:mm");
 	}
 
 	static calculateSupplierTotal(value: number, quantity: number): number {
@@ -91,7 +91,7 @@ class NotifyWhatsAppEventQueueUtils {
 					headers: {
 						Authorization: `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
 					},
-				}
+				},
 			);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
@@ -133,7 +133,7 @@ export default onTaskDispatched<RequestData>(
 
 		const suppliers =
 			NotifyWhatsAppEventQueueUtils.formatSuppliersToWhatsAppPayload(
-				event.suppliers
+				event.suppliers,
 			);
 
 		const whatsAppPayload = [
@@ -164,5 +164,5 @@ export default onTaskDispatched<RequestData>(
 			template: "event_notification_01",
 			payload: whatsAppPayload,
 		});
-	}
+	},
 );

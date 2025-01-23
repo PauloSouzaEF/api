@@ -21,46 +21,39 @@ export function getApiServerConfiguration() {
 
 	app.use(routes);
 
-	app.use(
-		(
-			error: unknown,
-			_request: Request,
-			response: Response,
-			_next: NextFunction
-		) => {
-			if (error instanceof ZodError) {
-				const validationErrors = fromZodError(error);
+	app.use((error: unknown, _request: Request, response: Response) => {
+		if (error instanceof ZodError) {
+			const validationErrors = fromZodError(error);
 
-				const issues = validationErrors.details.map((detail) => {
-					return {
-						property: detail.path,
-						message: detail.message,
-					};
-				});
+			const issues = validationErrors.details.map((detail) => {
+				return {
+					property: detail.path,
+					message: detail.message,
+				};
+			});
 
-				return response.status(HttpStatusCode.Conflict).send({
-					message: "Validation Error",
-					issues,
-				});
-			}
-
-			if (error instanceof AppError) {
-				const { message, statusCode } = error;
-
-				return response.status(statusCode).json({
-					errors: {
-						message,
-					},
-				});
-			}
-
-			console.error(error);
-
-			return response.status(HttpStatusCode.InternalServerError).json({
-				message: "Internal server error",
+			return response.status(HttpStatusCode.Conflict).send({
+				message: "Validation Error",
+				issues,
 			});
 		}
-	);
+
+		if (error instanceof AppError) {
+			const { message, statusCode } = error;
+
+			return response.status(statusCode).json({
+				errors: {
+					message,
+				},
+			});
+		}
+
+		console.error(error);
+
+		return response.status(HttpStatusCode.InternalServerError).json({
+			message: "Internal server error",
+		});
+	});
 
 	return app;
 }
