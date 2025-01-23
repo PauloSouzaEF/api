@@ -1,8 +1,10 @@
 {
 	"editor.fontLigatures": true,
 	"editor.fontSize": 14,
+	"editor.lineHeight": 2,
 	"editor.fontFamily": "JetBrainsMono Nerd Font",
 	"editor.fontWeight": "300",
 	"editor.tabSize": 2,
-	"editor.insertSpaces": true
+	"editor.insertSpaces": true,
+	"editor.minimap.enabled": false
 }

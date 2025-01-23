@@ -3,6 +3,7 @@ Content-Type: application/json
 
 {
 	"data": {
-		"eventId": "123"
+		"eventId": "67917f2289cab50322232216",
+		"userId": "6782b98d44f392ab0225aaee"
 	}
 }
