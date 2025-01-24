@@ -1,4 +1,7 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+
+dotenv.config();
+dotenv.config({ path: ".env.local", override: true });
 
 import { z } from "zod";
 
@@ -10,6 +13,4 @@ const envSchema = z.object({
 	WHATSAPP_PHONE_NUMBER_ID: z.string().default(""),
 });
 
-export function getEnvVariables() {
-	return envSchema.parse(process.env);
-}
+export const env = envSchema.parse(process.env);

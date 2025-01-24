@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { getEnvVariables } from "@/env";
+import { env } from "@/env";
 import { MongooseAccountModel } from "@/infra/databases/model/mongoose-account-model";
 import { MongooseUserModel } from "@/infra/databases/model/mongoose-user-model";
 import bcrypt from "bcrypt";
@@ -14,8 +14,6 @@ const loginUserBodySchema = z.object({
 });
 
 export class LoginUserController {
-	private static readonly env = getEnvVariables();
-
 	public static async handle(request: Request, response: Response) {
 		const { email, password, rememberMe } = loginUserBodySchema.parse(
 			request.body,
@@ -40,7 +38,7 @@ export class LoginUserController {
 		const userId = user._id;
 		const expiresIn = rememberMe ? "7d" : "1d";
 
-		const token = jsonwebtoken.sign({ sub: userId }, this.env.JWT_SECRET, {
+		const token = jsonwebtoken.sign({ sub: userId }, env.JWT_SECRET, {
 			expiresIn,
 		});
 

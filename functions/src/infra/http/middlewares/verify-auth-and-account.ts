@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { getEnvVariables } from "@/env";
+import { env } from "@/env";
 import type { NextFunction, Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
 
@@ -12,7 +12,6 @@ export function verifyAuthAndAccount(
 	response: Response,
 	next: NextFunction,
 ) {
-	const env = getEnvVariables();
 	const authHeader = request.headers.authorization;
 	const accountId = request.headers["x-account-id"];
 

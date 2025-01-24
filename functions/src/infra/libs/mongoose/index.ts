@@ -1,12 +1,10 @@
 import { error as logError } from "node:console";
 
-import { getEnvVariables } from "@/env";
 import mongoose from "mongoose";
+import { env } from "@/env";
 
 export async function loadMongodbConnection() {
 	try {
-		const env = getEnvVariables();
-
 		await mongoose.connect(env.MONGODB_URL, {
 			minPoolSize: 2,
 			maxPoolSize: 10,

@@ -5,8 +5,9 @@ import {
 } from "../databases/model/mongoose-event-model";
 import { MongooseUserModel } from "../databases/model/mongoose-user-model";
 import axios from "axios";
-import { getEnvVariables } from "@/env";
 import { format } from "date-fns";
+import { logError } from "../libs/pino";
+import { env } from "@/env";
 
 type WhatsAppTemplate = "event_notification_01";
 
@@ -64,8 +65,6 @@ class NotifyWhatsAppEventQueueUtils {
 		template,
 		payload: parameters,
 	}: SendWhatsAppMessageProps) {
-		const env = getEnvVariables();
-
 		try {
 			await axios.post(
 				`https://graph.facebook.com/v21.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
@@ -95,7 +94,7 @@ class NotifyWhatsAppEventQueueUtils {
 			);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
-				console.error({
+				logError({
 					responseData: err.response?.data,
 					responseHeaders: err.response?.headers,
 				});
@@ -103,7 +102,7 @@ class NotifyWhatsAppEventQueueUtils {
 				return;
 			}
 
-			console.log(err);
+			logError({ err });
 		}
 	}
 }

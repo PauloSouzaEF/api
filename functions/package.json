@@ -5,6 +5,7 @@
     "build:watch": "tsup --watch",
     "stopall": "lsof -t -i:5000 -i:5002 -i:5009 -i:8089 | xargs kill -9",
     "start:emulators": "firebase emulators:start --only functions,tasks,hosting",
+    "start:server": "tsx watch src/index.ts",
     "deploy": "firebase deploy --only functions",
     "lint": "eslint \"**/*.ts\" --fix"
   },
@@ -23,6 +24,7 @@
     "firebase-functions": "^6.0.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.2",
+    "pino-http": "^10.4.0",
     "tsup": "^8.3.5",
     "zod": "^3.24.1",
     "zod-validation-error": "^3.4.0"
@@ -39,6 +41,7 @@
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.21.0"
   },

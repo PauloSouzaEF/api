@@ -2,7 +2,7 @@ POST http://localhost:5000/register HTTP/1.3
 Content-Type: application/json
 
 {
-	"name": "Teste",
+	"name": "Paulo Henrique",
 	"phoneNumber": "33991158180",
 	"email": "teste@email.com",
 	"password": "teste123",
