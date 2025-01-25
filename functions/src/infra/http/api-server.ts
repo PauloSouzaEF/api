@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import "@/infra/jobs";
 
 import { AppError } from "@/core/error/app-error";
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
@@ -9,6 +10,8 @@ import { fromZodError } from "zod-validation-error";
 import { loadMongodbConnection } from "../libs/mongoose";
 import routes from "./routes";
 import pinoHttp from "pino-http";
+import { agenda } from "../libs/agenda";
+import cors from "cors";
 
 dotenv.config();
 dotenv.config({ path: ".env.local", override: true });
@@ -16,12 +19,14 @@ dotenv.config({ path: ".env.local", override: true });
 export function getApiServerConfiguration() {
 	const app = express();
 
+	app.use(cors());
 	app.use(pinoHttp());
 
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 
 	void loadMongodbConnection();
+	void agenda.start();
 
 	app.use(routes);
 

@@ -2,6 +2,7 @@ import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { MongooseAccountModel } from "@/infra/databases/model/mongoose-account-model";
 import { MongooseEventModel } from "@/infra/databases/model/mongoose-event-model";
 import { MongooseUserModel } from "@/infra/databases/model/mongoose-user-model";
+import { agenda } from "@/infra/libs/agenda";
 import type { Request, Response } from "express";
 import { z } from "zod";
 
@@ -49,7 +50,7 @@ export class CreateEventController {
 			return response.status(HttpStatusCode.NotFound).send();
 		}
 
-		await MongooseEventModel.create({
+		const eventCreated = await MongooseEventModel.create({
 			name,
 			dateTime: dateTime.getTime(),
 			whatsAppNotificationDateTime:
@@ -62,6 +63,32 @@ export class CreateEventController {
 			suppliers,
 			accountId,
 		});
+
+		const eventId = eventCreated._id;
+
+		if (whatsAppNotificationDateTime) {
+			const job = await agenda.schedule(
+				whatsAppNotificationDateTime,
+				"notify-whatsapp-event-job",
+				{
+					eventId,
+					userId,
+				},
+			);
+
+			const jobId = job.attrs._id;
+
+			await MongooseEventModel.updateOne(
+				{
+					_id: eventId,
+				},
+				{
+					$set: {
+						jobId,
+					},
+				},
+			);
+		}
 
 		return response.status(HttpStatusCode.Created).send();
 	}

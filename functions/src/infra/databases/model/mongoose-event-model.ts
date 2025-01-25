@@ -16,6 +16,8 @@ export interface Event {
 	suppliers: Supplier[];
 	income: number;
 	expense: number;
+	jobId?: Schema.Types.ObjectId;
+	jobExecution?: Date;
 	accountId: Schema.Types.ObjectId;
 	createdAt: Date;
 	updatedAt: Date;
@@ -45,6 +47,8 @@ const eventSchema = new Schema<Event>({
 	},
 	suppliers: { type: [supplierSchema], required: true },
 	accountId: { type: Schema.Types.ObjectId, required: true, ref: "Account" },
+	jobId: { type: Schema.Types.ObjectId, required: false },
+	jobExecution: { type: Date, required: false },
 	createdAt: {
 		type: Date,
 		default: Date.now,

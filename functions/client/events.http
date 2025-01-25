@@ -17,19 +17,19 @@ x-account-id: {{login.response.body.accounts[0].id}}
 
 
 {
-	"name": "Casamento de Maria e João",
+	"name": "Casamento de Maria e João {{$randomInt 1 100}}",
 	"dateTime": "{{$datetime iso8601}}",
 	"address": "Rua das Flores, 123",
 	"shouldNotifyWhatsappWhenNear": true,
-	"whatsAppNotificationDateTime": "{{$datetime iso8601}}",
-	"income": 3400,
-	"expense": 1500,
+	"whatsAppNotificationDateTime": "2025-01-25T00:30:23.133Z",
+	"income": 340,
+	"expense": 110,
 	"suppliers": [
 		{
 			"name": "GV City",
 			"type": "unity",
-			"value": 150,
-			"quantity": 50
+			"value": 110,
+			"quantity": 1
 		}
 	]
 }
@@ -78,7 +78,7 @@ Authorization: Bearer {{login.response.body.token}}
 x-account-id: {{login.response.body.accounts[0].id}}
 
 ###
-DELETE http://localhost:5000/events/6772e4ab0964910463644b39 HTTP/1.3
+DELETE http://localhost:5000/events/67942f0941450db41321b462 HTTP/1.3
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 x-account-id: {{login.response.body.accounts[0].id}}
