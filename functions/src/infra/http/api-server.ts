@@ -30,6 +30,10 @@ export function getApiServerConfiguration() {
 
 	app.use(routes);
 
+	app.get("/", (_, response) => {
+		return response.status(HttpStatusCode.Ok).send({ ok: true });
+	});
+
 	app.use((error: unknown, request: Request, response: Response) => {
 		if (error instanceof ZodError) {
 			const validationErrors = fromZodError(error);
