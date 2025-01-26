@@ -1,0 +1,11 @@
+{
+	"version": 2,
+	"buildCommand": "npm run build",
+	"devCommand": "npm run start:server",
+	"rewrites": [
+		{
+			"source": "/(.*)",
+			"destination": "/functions/src/index.ts"
+		}
+	]
+}
