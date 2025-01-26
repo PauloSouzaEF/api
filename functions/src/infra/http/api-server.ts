@@ -28,11 +28,10 @@ export function getApiServerConfiguration() {
 	void loadMongodbConnection();
 	void agenda.start();
 
-	app.use(routes);
-
 	app.get("/", (_, response) => {
 		return response.status(HttpStatusCode.Ok).send({ ok: true });
 	});
+	app.use(routes);
 
 	app.use((error: unknown, request: Request, response: Response) => {
 		if (error instanceof ZodError) {
