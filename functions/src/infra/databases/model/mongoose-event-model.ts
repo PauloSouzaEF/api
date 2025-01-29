@@ -1,3 +1,4 @@
+import { models } from "mongoose";
 import { Schema, model } from "mongoose";
 
 export interface Supplier {
@@ -62,4 +63,5 @@ const eventSchema = new Schema<Event>({
 	},
 });
 
-export const MongooseEventModel = model("Event", eventSchema, "events");
+export const MongooseEventModel =
+	models.Event || model("Event", eventSchema, "events");

@@ -1,3 +1,4 @@
+import { models } from "mongoose";
 import { Schema, model } from "mongoose";
 
 export interface Costs {
@@ -39,8 +40,5 @@ const supplierSchema = new Schema<Supplier>({
 	},
 });
 
-export const MongooseSupplierModel = model(
-	"Supplier",
-	supplierSchema,
-	"suppliers",
-);
+export const MongooseSupplierModel =
+	models.Supplier || model("Supplier", supplierSchema, "suppliers");

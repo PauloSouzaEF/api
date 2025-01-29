@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 export interface User {
 	name: string;
@@ -28,4 +28,5 @@ const userSchema = new Schema<User>({
 	},
 });
 
-export const MongooseUserModel = model("User", userSchema, "users");
+export const MongooseUserModel =
+	models.User || model("User", userSchema, "users");
