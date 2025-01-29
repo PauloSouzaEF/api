@@ -9,9 +9,9 @@ import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { loadMongodbConnection } from "../libs/mongoose";
 import routes from "./routes";
-import pinoHttp from "pino-http";
 import { agenda } from "../libs/agenda";
 import cors from "cors";
+import { logError } from "../libs/winston";
 
 dotenv.config();
 dotenv.config({ path: ".env.local", override: true });
@@ -19,21 +19,17 @@ dotenv.config({ path: ".env.local", override: true });
 export function getApiServerConfiguration() {
 	const app = express();
 
+	void loadMongodbConnection();
+	void agenda.start();
+
 	app.use(cors());
-	app.use(pinoHttp());
 
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 
-	void loadMongodbConnection();
-	void agenda.start();
-
-	app.get("/", (_, response) => {
-		return response.status(HttpStatusCode.Ok).send({ ok: true });
-	});
 	app.use(routes);
 
-	app.use((error: unknown, request: Request, response: Response) => {
+	app.use((error: unknown, _request: Request, response: Response) => {
 		if (error instanceof ZodError) {
 			const validationErrors = fromZodError(error);
 
@@ -60,7 +56,7 @@ export function getApiServerConfiguration() {
 			});
 		}
 
-		request.log.error("Internal server error", error);
+		logError("Internal server error", { error });
 
 		return response.status(HttpStatusCode.InternalServerError).json({
 			message: "Internal server error",

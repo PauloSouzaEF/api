@@ -6,7 +6,7 @@ import {
 } from "../databases/model/mongoose-event-model";
 import axios from "axios";
 import { env } from "@/env";
-import { logError } from "../libs/pino";
+import { logError, logInfo } from "../libs/winston";
 import { MongooseUserModel } from "../databases/model/mongoose-user-model";
 
 type WhatsAppTemplate = "event_notification_01";
@@ -65,51 +65,43 @@ class NotifyWhatsAppEventQueueUtils {
 		template,
 		payload: parameters,
 	}: SendWhatsAppMessageProps) {
-		try {
-			await axios.post(
-				`https://graph.facebook.com/v21.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
-				{
-					messaging_product: "whatsapp",
-					to,
-					type: "template",
-					template: {
-						name: template,
-						language: {
-							policy: "deterministic",
-							code: "pt_BR",
+		await axios.post(
+			`https://graph.facebook.com/v21.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
+			{
+				messaging_product: "whatsapp",
+				to,
+				type: "template",
+				template: {
+					name: template,
+					language: {
+						policy: "deterministic",
+						code: "pt_BR",
+					},
+					components: [
+						{
+							type: "body",
+							parameters,
 						},
-						components: [
-							{
-								type: "body",
-								parameters,
-							},
-						],
-					},
+					],
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
-					},
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
 				},
-			);
-		} catch (err) {
-			if (axios.isAxiosError(err)) {
-				logError({
-					responseData: err.response?.data,
-					responseHeaders: err.response?.headers,
-				});
-
-				return;
-			}
-
-			logError({ err });
-		}
+			},
+		);
 	}
 }
 
 agenda.define<NotifyWhatsAppEventJob>(
 	"notify-whatsapp-event-job",
 	async (job) => {
+		logInfo("Job started", {
+			jobData: job.attrs.data,
+			env,
+		});
+
 		const { eventId, userId } = job.attrs.data;
 
 		const [event, user] = await Promise.all([
@@ -149,17 +141,43 @@ agenda.define<NotifyWhatsAppEventJob>(
 			},
 		];
 
-		await NotifyWhatsAppEventQueueUtils.sendWhatsAppMessage({
-			to: user.phoneNumber,
-			template: "event_notification_01",
-			payload: whatsAppPayload,
-		});
+		try {
+			await NotifyWhatsAppEventQueueUtils.sendWhatsAppMessage({
+				to: user.phoneNumber,
+				template: "event_notification_01",
+				payload: whatsAppPayload,
+			});
 
-		await MongooseEventModel.updateOne(
-			{ _id: eventId },
-			{
-				jobExecution: new Date(),
-			},
-		);
+			const jobExecution = new Date();
+
+			await MongooseEventModel.updateOne(
+				{ _id: eventId },
+				{
+					jobExecution,
+				},
+			);
+
+			logInfo("Event notified successfully", {
+				eventId,
+				userId,
+				jobExecution,
+			});
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				logError("Event notified error", {
+					data: error?.response?.data,
+					headers: error?.response?.headers,
+					status: error?.response?.status,
+				});
+
+				return;
+			}
+
+			logError("Event notified error", {
+				eventId,
+				userId,
+				error,
+			});
+		}
 	},
 );

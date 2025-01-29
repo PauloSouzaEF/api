@@ -7,7 +7,7 @@ interface TokenPayload {
 	sub: string;
 }
 
-export function verifyAuthAndAccount(
+export function verifyAuthAndAccountMiddleware(
 	request: Request,
 	response: Response,
 	next: NextFunction,

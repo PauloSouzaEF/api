@@ -1,10 +1,10 @@
-POST http://localhost:5000/register HTTP/1.3
+POST https://api-six-black-76.vercel.app/register HTTP/1.3
 Content-Type: application/json
 
 {
-	"name": "Paulo Henrique",
-	"phoneNumber": "5533984485752",
-	"email": "teste@email.com",
+	"name": "Admin",
+	"phoneNumber": "33991158180",
+	"email": "admin@eventfacil.com.br",
 	"password": "teste123",
 	"plan": "exclusive"
 }

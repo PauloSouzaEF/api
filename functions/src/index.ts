@@ -8,7 +8,8 @@
 // export { api, queues };
 
 import { getApiServerConfiguration } from "./infra/http/api-server";
+import { logInfo } from "./infra/libs/winston";
 
 const server = getApiServerConfiguration();
 
-server.listen(5000, () => console.log("🚀 Running on port 5000"));
+server.listen(5000, () => logInfo("🚀 Running on port 5000"));
