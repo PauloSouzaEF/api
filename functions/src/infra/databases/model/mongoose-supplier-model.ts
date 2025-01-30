@@ -1,5 +1,4 @@
-import { models } from "mongoose";
-import { Schema, model } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 export interface Costs {
 	type: string;
@@ -40,5 +39,7 @@ const supplierSchema = new Schema<Supplier>({
 	},
 });
 
-export const MongooseSupplierModel =
+const SupplierModel =
 	models.Supplier || model("Supplier", supplierSchema, "suppliers");
+
+export default SupplierModel as Model<Supplier>;

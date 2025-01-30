@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { MongooseEventModel } from "@/infra/databases/model/mongoose-event-model";
+import MongooseEventModel from "@/infra/databases/model/mongoose-event-model";
 import type { Request, Response } from "express";
 import { z } from "zod";
 

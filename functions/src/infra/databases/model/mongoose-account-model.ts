@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Model, Schema, model, models } from "mongoose";
 
 export enum Plan {
 	ESSENTIAL = "essential",
@@ -33,5 +33,7 @@ const accountSchema = new Schema<Account>({
 	},
 });
 
-export const MongooseAccountModel =
+const AccountModel =
 	models.Account || model("Account", accountSchema, "accounts");
+
+export default AccountModel as Model<Account>;

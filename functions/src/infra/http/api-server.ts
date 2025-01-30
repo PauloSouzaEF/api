@@ -27,6 +27,10 @@ export function getApiServerConfiguration() {
 	app.use(express.json());
 	app.use(express.urlencoded({ extended: true }));
 
+	app.get("/", (_request, response) =>
+		response.status(HttpStatusCode.Ok).send({ running: true }),
+	);
+
 	app.use(routes);
 
 	app.use((error: unknown, _request: Request, response: Response) => {

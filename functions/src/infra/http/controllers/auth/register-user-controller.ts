@@ -1,9 +1,8 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import {
-	MongooseAccountModel,
+import MongooseAccountModel, {
 	Plan,
 } from "@/infra/databases/model/mongoose-account-model";
-import { MongooseUserModel } from "@/infra/databases/model/mongoose-user-model";
+import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
 import { z } from "zod";

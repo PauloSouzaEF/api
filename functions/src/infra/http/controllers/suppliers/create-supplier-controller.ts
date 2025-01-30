@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { MongooseAccountModel } from "@/infra/databases/model/mongoose-account-model";
-import { MongooseSupplierModel } from "@/infra/databases/model/mongoose-supplier-model";
-import { MongooseUserModel } from "@/infra/databases/model/mongoose-user-model";
+import MongooseAccountModel from "@/infra/databases/model/mongoose-account-model";
+import MongooseSupplierModel from "@/infra/databases/model/mongoose-supplier-model";
+import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
 import type { Request, Response } from "express";
 import { z } from "zod";
 

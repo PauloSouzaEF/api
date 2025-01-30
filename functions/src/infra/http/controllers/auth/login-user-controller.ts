@@ -1,7 +1,7 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { env } from "@/env";
-import { MongooseAccountModel } from "@/infra/databases/model/mongoose-account-model";
-import { MongooseUserModel } from "@/infra/databases/model/mongoose-user-model";
+import MongooseAccountModel from "@/infra/databases/model/mongoose-account-model";
+import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";

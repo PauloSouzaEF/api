@@ -1,13 +1,12 @@
 import { format } from "date-fns";
 import { agenda } from "../libs/agenda";
-import {
-	MongooseEventModel,
+import MongooseEventModel, {
 	Supplier,
 } from "../databases/model/mongoose-event-model";
 import axios from "axios";
 import { env } from "@/env";
 import { logError, logInfo } from "../libs/winston";
-import { MongooseUserModel } from "../databases/model/mongoose-user-model";
+import MongooseUserModel from "../databases/model/mongoose-user-model";
 
 type WhatsAppTemplate = "event_notification_01";
 

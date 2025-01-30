@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { MongooseEventModel } from "@/infra/databases/model/mongoose-event-model";
+import MongooseEventModel from "@/infra/databases/model/mongoose-event-model";
 import { endOfMonth, endOfYear, startOfMonth, startOfYear } from "date-fns";
 import type { Request, Response } from "express";
 

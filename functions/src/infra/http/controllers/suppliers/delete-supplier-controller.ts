@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { MongooseSupplierModel } from "@/infra/databases/model/mongoose-supplier-model";
+import MongooseSupplierModel from "@/infra/databases/model/mongoose-supplier-model";
 import type { Request, Response } from "express";
 import { z } from "zod";
 
