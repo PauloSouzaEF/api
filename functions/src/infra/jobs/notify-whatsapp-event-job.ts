@@ -96,9 +96,9 @@ class NotifyWhatsAppEventQueueUtils {
 agenda.define<NotifyWhatsAppEventJob>(
 	"notify-whatsapp-event-job",
 	async (job) => {
-		logInfo("Job started", {
+		logInfo({
+			message: "Job started",
 			jobData: job.attrs.data,
-			env,
 		});
 
 		const { eventId, userId } = job.attrs.data;
@@ -156,14 +156,16 @@ agenda.define<NotifyWhatsAppEventJob>(
 				},
 			);
 
-			logInfo("Event notified successfully", {
+			logInfo({
+				message: "Event notified successfully",
 				eventId,
 				userId,
 				jobExecution,
 			});
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
-				logError("Event notified error", {
+				logError({
+					message: "Event notified error",
 					data: error?.response?.data,
 					headers: error?.response?.headers,
 					status: error?.response?.status,
@@ -172,7 +174,8 @@ agenda.define<NotifyWhatsAppEventJob>(
 				return;
 			}
 
-			logError("Event notified error", {
+			logError({
+				message: "Event notified error",
 				eventId,
 				userId,
 				error,
