@@ -1,4 +1,4 @@
-import { logInfo } from "@/infra/libs/winston";
+import { logInfo } from "@/infra/libs/logger";
 import { NextFunction, Request, Response } from "express";
 
 export default function logEntryPointMiddleware(

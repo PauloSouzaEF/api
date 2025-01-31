@@ -64,7 +64,7 @@ export class CreateEventController {
 			accountId,
 		});
 
-		const eventId = eventCreated._id;
+		const eventId = eventCreated._id.toString();
 
 		if (whatsAppNotificationDateTime) {
 			const job = await agenda.schedule(

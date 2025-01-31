@@ -5,8 +5,8 @@ import MongooseEventModel, {
 } from "../databases/model/mongoose-event-model";
 import axios from "axios";
 import { env } from "@/env";
-import { logError, logInfo } from "../libs/winston";
 import MongooseUserModel from "../databases/model/mongoose-user-model";
+import { logError, logInfo } from "../libs/logger";
 
 type WhatsAppTemplate = "event_notification_01";
 
@@ -96,8 +96,7 @@ class NotifyWhatsAppEventQueueUtils {
 agenda.define<NotifyWhatsAppEventJob>(
 	"notify-whatsapp-event-job",
 	async (job) => {
-		logInfo({
-			message: "Job started",
+		logInfo("Job started", {
 			jobData: job.attrs.data,
 		});
 
@@ -156,16 +155,14 @@ agenda.define<NotifyWhatsAppEventJob>(
 				},
 			);
 
-			logInfo({
-				message: "Event notified successfully",
+			logInfo("Event notified successfully", {
 				eventId,
 				userId,
 				jobExecution,
 			});
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
-				logError({
-					message: "Event notified error",
+				logError("Event notified error", {
 					data: error?.response?.data,
 					headers: error?.response?.headers,
 					status: error?.response?.status,
@@ -174,8 +171,7 @@ agenda.define<NotifyWhatsAppEventJob>(
 				return;
 			}
 
-			logError({
-				message: "Event notified error",
+			logError("Event notified error", {
 				eventId,
 				userId,
 				error,

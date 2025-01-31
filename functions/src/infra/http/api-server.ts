@@ -11,7 +11,7 @@ import { loadMongodbConnection } from "../libs/mongoose";
 import routes from "./routes";
 import { agenda } from "../libs/agenda";
 import cors from "cors";
-import { logError } from "../libs/winston";
+import logError from "../libs/logger/log-error";
 
 dotenv.config();
 dotenv.config({ path: ".env.local", override: true });
@@ -28,7 +28,7 @@ export function getApiServerConfiguration() {
 	app.use(express.urlencoded({ extended: true }));
 
 	app.get("/", (_request, response) =>
-		response.status(HttpStatusCode.Ok).send({ running: true }),
+		response.status(HttpStatusCode.Ok).json({ running: true }),
 	);
 
 	app.use(routes);

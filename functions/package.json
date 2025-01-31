@@ -7,7 +7,7 @@
     "start:emulators": "firebase emulators:start --only functions,tasks,hosting",
     "start:server": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "yarn build && vercel --prod",
     "lint": "eslint \"**/*.ts\" --fix"
   },
   "engines": {
@@ -28,7 +28,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.2",
     "tsup": "^8.3.5",
-    "winston": "^3.17.0",
     "zod": "^3.24.1",
     "zod-validation-error": "^3.4.0"
   },

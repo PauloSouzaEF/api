@@ -8,7 +8,7 @@
 // export { api, queues };
 
 import { getApiServerConfiguration } from "./infra/http/api-server";
-import { logInfo } from "./infra/libs/winston";
+import logInfo from "./infra/libs/logger/log-info";
 
 const server = getApiServerConfiguration();
 
