@@ -2,26 +2,18 @@ import { format } from "date-fns";
 import { agenda } from "../libs/agenda";
 import MongooseEventModel, {
 	Supplier,
+	Event,
 } from "../databases/model/mongoose-event-model";
 import axios from "axios";
-import { env } from "@/env";
-import MongooseUserModel from "../databases/model/mongoose-user-model";
+import MongooseUserModel, {
+	User,
+} from "../databases/model/mongoose-user-model";
 import { logError, logInfo } from "../libs/logger";
-
-type WhatsAppTemplate = "event_notification_01";
+import { wwebClient } from "../libs/wwebjs";
 
 interface NotifyWhatsAppEventJob {
 	eventId: string;
 	userId: string;
-}
-
-interface SendWhatsAppMessageProps {
-	to: string;
-	template: WhatsAppTemplate;
-	payload: Array<{
-		type: string;
-		text: string;
-	}>;
 }
 
 class NotifyWhatsAppEventQueueUtils {
@@ -59,37 +51,34 @@ class NotifyWhatsAppEventQueueUtils {
 			}, "");
 	}
 
-	static async sendWhatsAppMessage({
-		to,
-		template,
-		payload: parameters,
-	}: SendWhatsAppMessageProps) {
-		await axios.post(
-			`https://graph.facebook.com/v21.0/${env.WHATSAPP_PHONE_NUMBER_ID}/messages`,
-			{
-				messaging_product: "whatsapp",
-				to,
-				type: "template",
-				template: {
-					name: template,
-					language: {
-						policy: "deterministic",
-						code: "pt_BR",
-					},
-					components: [
-						{
-							type: "body",
-							parameters,
-						},
-					],
-				},
-			},
-			{
-				headers: {
-					Authorization: `Bearer ${env.WHATSAPP_ACCESS_TOKEN}`,
-				},
-			},
-		);
+	static formatWhatsAppMessage(user: User, event: Event) {
+		return `📢 Aviso de Evento
+
+Olá, ${user.name}, tudo bem?
+
+Informamos que o evento *${event.name}* está agendado com os seguintes detalhes:
+
+📅 Data do Evento: ${this.formatDateTime(event.dateTime)}
+🏛 Local: ${event.address}
+
+🛠 Fornecedores e Valores:
+${this.formatSuppliersToWhatsAppPayload(event.suppliers)}
+
+📈 Valores:
+Total de Gastos: R$ ${this.formatCurrency(event.expense)}
+Total de Recebimentos: R$ ${this.formatCurrency(event.income)}`;
+	}
+
+	static async sendWhatsAppMessage(number: string, message: string) {
+		const numberContactPayload = await wwebClient.getNumberId(number);
+
+		if (!numberContactPayload) {
+			logInfo("only contacts can send messages", { number });
+			return;
+		}
+
+		const wid = numberContactPayload._serialized;
+		await wwebClient.sendMessage(wid, message);
 	}
 }
 
@@ -111,40 +100,11 @@ agenda.define<NotifyWhatsAppEventJob>(
 			return;
 		}
 
-		const suppliers =
-			NotifyWhatsAppEventQueueUtils.formatSuppliersToWhatsAppPayload(
-				event.suppliers,
-			);
-
-		const whatsAppPayload = [
-			{
-				type: "text",
-				text: user.name,
-			},
-			{
-				type: "text",
-				text: event.name,
-			},
-			{
-				type: "text",
-				text: NotifyWhatsAppEventQueueUtils.formatDateTime(event.dateTime),
-			},
-			{
-				type: "text",
-				text: event.address,
-			},
-			{
-				type: "text",
-				text: suppliers,
-			},
-		];
-
 		try {
-			await NotifyWhatsAppEventQueueUtils.sendWhatsAppMessage({
-				to: user.phoneNumber,
-				template: "event_notification_01",
-				payload: whatsAppPayload,
-			});
+			await NotifyWhatsAppEventQueueUtils.sendWhatsAppMessage(
+				user.phoneNumber,
+				NotifyWhatsAppEventQueueUtils.formatWhatsAppMessage(user, event),
+			);
 
 			const jobExecution = new Date();
 

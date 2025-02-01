@@ -12,6 +12,7 @@ import routes from "./routes";
 import { agenda } from "../libs/agenda";
 import cors from "cors";
 import logError from "../libs/logger/log-error";
+import { wwebClient } from "../libs/wwebjs";
 
 dotenv.config();
 dotenv.config({ path: ".env.local", override: true });
@@ -20,6 +21,7 @@ export function getApiServerConfiguration() {
 	const app = express();
 
 	void loadMongodbConnection();
+	void wwebClient.initialize();
 	void agenda.start();
 
 	app.use(cors());

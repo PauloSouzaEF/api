@@ -12,3 +12,7 @@ node_modules/
 # Output directory
 dist/
 .vercel
+
+# wwebjs
+.wwjs
+.wwebjs_cache
