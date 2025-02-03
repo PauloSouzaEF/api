@@ -5,7 +5,7 @@
     "build:watch": "tsup --watch",
     "stopall": "lsof -t -i:5000 -i:5002 -i:5009 -i:8089 | xargs kill -9",
     "start:emulators": "firebase emulators:start --only functions,tasks,hosting",
-    "start:server": "tsx watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "deploy": "sh deploy.sh",
     "lint": "eslint \"**/*.ts\" --fix"
@@ -29,7 +29,7 @@
     "mongoose": "^8.9.2",
     "qrcode-terminal": "^0.12.0",
     "tsup": "^8.3.5",
-    "whatsapp-web.js": "^1.26.0",
+    "whatsapp-web.js": "^1.23.0",
     "zod": "^3.24.1",
     "zod-validation-error": "^3.4.0"
   },
@@ -45,7 +45,9 @@
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "globals": "^15.14.0",
+    "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.21.0"
