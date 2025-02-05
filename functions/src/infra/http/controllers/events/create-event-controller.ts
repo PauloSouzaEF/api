@@ -20,6 +20,7 @@ const createEventBodySchema = z.object({
 			type: z.string().min(1),
 			value: z.number().min(1),
 			quantity: z.number().min(1),
+			isPaid: z.boolean().default(false).optional(),
 		}),
 	),
 });

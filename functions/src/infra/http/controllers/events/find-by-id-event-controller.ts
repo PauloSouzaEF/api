@@ -3,13 +3,13 @@ import MongooseEventModel from "@/infra/databases/model/mongoose-event-model";
 import type { Request, Response } from "express";
 import { z } from "zod";
 
-const fetchbyidEventParamsSchema = z.object({
+const findByIdEventParamsSchema = z.object({
 	eventId: z.string().min(1),
 });
 
-export class FetchByIdEventController {
+export class FindByIdEventController {
 	public static async handle(request: Request, response: Response) {
-		const { eventId } = fetchbyidEventParamsSchema.parse(request.params);
+		const { eventId } = findByIdEventParamsSchema.parse(request.params);
 
 		const event = await MongooseEventModel.findById(eventId);
 
@@ -29,6 +29,7 @@ export class FetchByIdEventController {
 				type: supplier.type,
 				value: supplier.value,
 				quantity: supplier.quantity,
+				isPaid: supplier?.isPaid ?? false,
 			})),
 			income: event.income,
 			expense: event.expense,

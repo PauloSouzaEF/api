@@ -5,6 +5,7 @@ export interface Supplier {
 	type: string;
 	value: number;
 	quantity: number;
+	isPaid: boolean;
 }
 
 export interface Event {
@@ -30,6 +31,7 @@ const supplierSchema = new Schema<Supplier>(
 		type: { type: String, required: true },
 		value: { type: Number, required: true },
 		quantity: { type: Number, required: true },
+		isPaid: { type: Boolean, required: true, default: false },
 	},
 	{ _id: false },
 );

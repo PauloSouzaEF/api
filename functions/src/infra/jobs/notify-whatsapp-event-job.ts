@@ -38,15 +38,16 @@ class NotifyWhatsAppEventQueueUtils {
 				return {
 					name: supplier.name,
 					value: this.calculateSupplierTotal(supplier.value, supplier.quantity),
+					isPaid: supplier.isPaid,
 				};
 			})
 			.reduce((textAccumulator, supplier, index, array) => {
 				const isLast = index === array.length - 1;
 				return (
 					textAccumulator +
-					`${supplier.name} - R$ ${this.formatCurrency(supplier.value)}${
-						isLast ? "" : "\r"
-					}`
+					`${supplier.name} - R$ ${this.formatCurrency(supplier.value)} - ${
+						supplier.isPaid ? "Pago" : "Não Pago"
+					}${isLast ? "" : "\r"}`
 				);
 			}, "");
 	}
