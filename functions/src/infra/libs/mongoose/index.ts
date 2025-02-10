@@ -13,7 +13,14 @@ export async function loadMongodbConnection(attempt = 1) {
 			maxPoolSize: 10,
 			authSource: "admin",
 			serverSelectionTimeoutMS: 5000,
+			serverApi: {
+				version: "1",
+				strict: true,
+				deprecationErrors: true,
+			},
 		});
+
+		await mongoose.connection?.db?.admin()?.command({ ping: 1 });
 
 		return mongoose;
 	} catch (error) {
