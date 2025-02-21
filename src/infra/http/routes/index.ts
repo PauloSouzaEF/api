@@ -5,6 +5,7 @@ import { suppliersRouter } from "./suppliers-router";
 import { eventsRouter } from "./events-router";
 import { dashboardRouter } from "./dashboard-router";
 import { calendarRouter } from "./calendar-router";
+import { reportsRouter } from "./reports-router";
 import logEntryPointMiddleware from "../middlewares/log-entry-point";
 
 const routes = Router();
@@ -17,5 +18,6 @@ routes.use(suppliersRouter);
 routes.use(eventsRouter);
 routes.use(dashboardRouter);
 routes.use(calendarRouter);
+routes.use(reportsRouter);
 
 export default routes;

@@ -3,14 +3,12 @@
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "stopall": "lsof -t -i:5000 -i:5002 -i:5009 -i:8089 | xargs kill -9",
-    "start:emulators": "firebase emulators:start --only functions,tasks,hosting",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "deploy": "sh deploy.sh",
     "lint": "eslint \"**/*.ts\" --fix"
   },
-    "main": "dist/index.js",
+  "main": "dist/index.js",
   "dependencies": {
     "@hokify/agenda": "^6.3.0",
     "axios": "^1.7.9",
