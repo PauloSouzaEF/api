@@ -20,3 +20,7 @@ dist/
 
 # client folder
 client/
+
+# lock fle
+package-lock.json
+yarn.lock
