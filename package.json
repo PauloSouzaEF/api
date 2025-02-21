@@ -10,10 +10,7 @@
     "deploy": "sh deploy.sh",
     "lint": "eslint \"**/*.ts\" --fix"
   },
-  "engines": {
-    "node": "22"
-  },
-  "main": "dist/index.js",
+    "main": "dist/index.js",
   "dependencies": {
     "@hokify/agenda": "^6.3.0",
     "axios": "^1.7.9",

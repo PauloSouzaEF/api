@@ -1,4 +1,17 @@
 {
-	"terminal.integrated.cwd": "functions",
-	"biome.lspBin": "functions/node_modules/.bin/biome",
+	"editor.fontLigatures": true,
+	"editor.fontSize": 14,
+	"editor.lineHeight": 1.3,
+	"editor.fontFamily": "JetBrainsMono Nerd Font",
+	"editor.fontWeight": "300",
+	"editor.tabSize": 2,
+	"editor.insertSpaces": true,
+	"editor.minimap.enabled": false,
+	"eslint.enable": true,
+	"eslint.format.enable": true,
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit",
+		}
+	}
 }

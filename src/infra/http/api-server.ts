@@ -22,7 +22,9 @@ export function getApiServerConfiguration() {
 
 	void loadMongodbConnection();
 	void wwebClient.initialize();
+
 	void agenda.start();
+	void agenda.every("0 */2 * * *", "wake-database-up-job");
 
 	app.use(cors());
 
