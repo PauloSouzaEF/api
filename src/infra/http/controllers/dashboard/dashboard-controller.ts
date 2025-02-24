@@ -1,5 +1,6 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import MongooseEventModel from "@/infra/databases/model/mongoose-event-model";
+import { getMonthsNames } from "@/utils/get-months-names";
 import { endOfMonth, endOfYear, startOfMonth, startOfYear } from "date-fns";
 import type { Request, Response } from "express";
 
@@ -11,21 +12,6 @@ interface EventMonthlyDivided {
 }
 
 export class DashboardController {
-	private static readonly monthNames = [
-		"Jan",
-		"Fev",
-		"Mar",
-		"Abr",
-		"Mai",
-		"Jun",
-		"Jul",
-		"Ago",
-		"Set",
-		"Out",
-		"Nov",
-		"Dez",
-	];
-
 	public static async handle(_request: Request, response: Response) {
 		const now = new Date();
 
@@ -93,7 +79,9 @@ export class DashboardController {
 	private static loadEventsPerMonth() {
 		const eventsMonthlyDivided = {} as EventMonthlyDivided;
 
-		for (const month of this.monthNames) {
+		const monthsNames = getMonthsNames();
+
+		for (const month of monthsNames) {
 			eventsMonthlyDivided[month] = { income: 0, expense: 0 };
 		}
 

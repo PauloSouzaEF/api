@@ -1,7 +1,15 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import EventModel from "@/infra/databases/model/mongoose-event-model";
+import { getMonthsNames } from "@/utils/get-months-names";
 import { format } from "date-fns";
 import { Request, Response } from "express";
+
+interface EventQuantityMonthlyDivided {
+	[year: number]: {
+		month: string;
+		quantity: number;
+	}[];
+}
 
 export class ReportsController {
 	public static async handle(_request: Request, response: Response) {
@@ -41,22 +49,48 @@ export class ReportsController {
 	private static async getEventsQuantityPerYear() {
 		const events = await EventModel.find();
 
-		const eventsQuantityPerYear = events.reduce(
-			(acc, event) => {
-				const year = event.dateTime.getFullYear();
-
-				if (!acc[year]) {
-					acc[year] = 0;
-				}
-
-				acc[year]++;
-
-				return acc;
-			},
-			{} as Record<number, number>,
+		const eventsPerYear = new Set(
+			events.map((event) => event.dateTime.getFullYear()),
 		);
 
+		const eventsMonthlyDivided = this.loadEventsPerMonth(
+			Array.from(eventsPerYear),
+		);
+
+		const eventsQuantityPerYear = events.reduce((acc, event) => {
+			const year = event.dateTime.getFullYear();
+			const month = event.dateTime.getMonth();
+
+			const yearExists = acc[year];
+			const monthExists = yearExists[month];
+
+			monthExists.quantity += 1;
+
+			return acc;
+		}, eventsMonthlyDivided);
+
 		return eventsQuantityPerYear;
+	}
+
+	private static loadEventsPerMonth(years: number[]) {
+		const eventsMonthlyDivided = {} as EventQuantityMonthlyDivided;
+
+		const monthsNames = getMonthsNames();
+
+		for (const year of years) {
+			for (const month of monthsNames) {
+				if (!eventsMonthlyDivided[year]) {
+					eventsMonthlyDivided[year] = [];
+				}
+
+				eventsMonthlyDivided[year].push({
+					month,
+					quantity: 0,
+				});
+			}
+		}
+
+		return eventsMonthlyDivided;
 	}
 
 	private static formatToFixed(number: number) {
