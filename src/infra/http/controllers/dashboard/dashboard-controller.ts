@@ -43,6 +43,8 @@ export class DashboardController {
 			},
 		}).exec();
 
+		const eventsMonthlyDividedLoaded = this.loadEventsPerMonth();
+
 		const eventsMonthlyDivided = annualEvents.reduce((acc, event) => {
 			const month = this.getMonthName(event.dateTime);
 
@@ -54,23 +56,7 @@ export class DashboardController {
 			acc[month].expense += event.expense;
 
 			return acc;
-		}, {} as EventMonthlyDivided);
-
-		for (const month of this.monthNames) {
-			if (!eventsMonthlyDivided[month]) {
-				eventsMonthlyDivided[month] = { income: 0, expense: 0 };
-
-				continue;
-			}
-
-			eventsMonthlyDivided[month].income = Number(
-				eventsMonthlyDivided[month].income.toFixed(2),
-			);
-
-			eventsMonthlyDivided[month].expense = Number(
-				eventsMonthlyDivided[month].expense.toFixed(2),
-			);
-		}
+		}, eventsMonthlyDividedLoaded);
 
 		const incomePerMonth = monthlyEvents.reduce((acc, event) => {
 			return Number((acc + event.income).toFixed(2));
@@ -102,5 +88,15 @@ export class DashboardController {
 	private static capitalizeFirstLetter(input: string): string {
 		if (!input) return input;
 		return input.charAt(0).toUpperCase() + input.slice(1);
+	}
+
+	private static loadEventsPerMonth() {
+		const eventsMonthlyDivided = {} as EventMonthlyDivided;
+
+		for (const month of this.monthNames) {
+			eventsMonthlyDivided[month] = { income: 0, expense: 0 };
+		}
+
+		return eventsMonthlyDivided;
 	}
 }
