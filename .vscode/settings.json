@@ -6,5 +6,6 @@
 	"editor.fontWeight": "300",
 	"editor.tabSize": 2,
 	"editor.insertSpaces": true,
-	"editor.minimap.enabled": false
+	"editor.minimap.enabled": false,
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

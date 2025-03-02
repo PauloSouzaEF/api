@@ -17,6 +17,7 @@ dist/
 # wwebjs
 .wwjs
 .wwebjs_cache
+.wwebjs_auth
 
 # client folder
 client/

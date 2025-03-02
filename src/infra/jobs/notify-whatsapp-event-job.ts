@@ -10,6 +10,7 @@ import MongooseUserModel, {
 } from "../databases/model/mongoose-user-model";
 import { logError, logInfo } from "../libs/logger";
 import { wwebClient } from "../libs/wwebjs";
+import { ptBR } from "date-fns/locale/pt-BR";
 
 interface NotifyWhatsAppEventJob {
 	eventId: string;
@@ -18,7 +19,7 @@ interface NotifyWhatsAppEventJob {
 
 class NotifyWhatsAppEventQueueUtils {
 	static formatDateTime(dateTime: Date) {
-		return format(dateTime, "dd/MM/yyyy 'às' HH:mm");
+		return format(dateTime, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR });
 	}
 
 	static calculateSupplierTotal(value: number, quantity: number): number {

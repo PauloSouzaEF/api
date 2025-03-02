@@ -6,9 +6,7 @@ export const wwebClient = new Client({
 	puppeteer: {
 		args: ["--no-sandbox", "--disable-setuid-sandbox"],
 	},
-	authStrategy: new LocalAuth({
-		dataPath: ".wwjs",
-	}),
+	authStrategy: new LocalAuth(),
 });
 
 wwebClient.once("ready", () => {
