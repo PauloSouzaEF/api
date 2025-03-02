@@ -1,3 +1,4 @@
+import { TZDate } from "@date-fns/tz";
 import { format } from "date-fns";
 import { agenda } from "../libs/agenda";
 import MongooseEventModel, {
@@ -10,7 +11,7 @@ import MongooseUserModel, {
 } from "../databases/model/mongoose-user-model";
 import { logError, logInfo } from "../libs/logger";
 import { wwebClient } from "../libs/wwebjs";
-import { ptBR } from "date-fns/locale/pt-BR";
+import { ptBR } from "date-fns/locale";
 
 interface NotifyWhatsAppEventJob {
 	eventId: string;
@@ -60,7 +61,7 @@ Olá, ${user.name}, tudo bem?
 
 Informamos que o evento *${event.name}* está agendado com os seguintes detalhes:
 
-📅 Data do Evento: ${this.formatDateTime(event.dateTime)}
+📅 Data do Evento: ${this.formatDateTime(new TZDate(event.dateTime, "America/Sao_Paulo"))}
 🏛 Local: ${event.address}
 
 🛠 Fornecedores e Valores:

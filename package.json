@@ -10,6 +10,7 @@
   },
   "main": "dist/index.js",
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
     "@hokify/agenda": "^6.3.0",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
