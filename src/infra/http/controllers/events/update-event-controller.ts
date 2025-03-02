@@ -3,6 +3,7 @@ import MongooseAccountModel from "@/infra/databases/model/mongoose-account-model
 import MongooseEventModel from "@/infra/databases/model/mongoose-event-model";
 import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
 import { agenda } from "@/infra/libs/agenda";
+import { isBefore } from "date-fns";
 import type { Request, Response } from "express";
 import { z } from "zod";
 
@@ -11,7 +12,7 @@ const updateEventBodySchema = z.object({
 	dateTime: z.coerce.date(),
 	address: z.string().min(1),
 	shouldNotifyWhatsappWhenNear: z.boolean(),
-	whatsAppNotificationDateTime: z.coerce.date().optional(),
+	whatsAppNotificationDateTimes: z.array(z.coerce.date()).default([]),
 	income: z.number().min(1),
 	expense: z.number().min(1),
 	suppliers: z.array(
@@ -34,7 +35,7 @@ export class UpdateEventController {
 			dateTime,
 			address,
 			shouldNotifyWhatsappWhenNear,
-			whatsAppNotificationDateTime,
+			whatsAppNotificationDateTimes,
 			income,
 			expense,
 			suppliers,
@@ -68,7 +69,6 @@ export class UpdateEventController {
 					dateTime: dateTime.getTime(),
 					address,
 					shouldNotifyWhatsappWhenNear,
-					whatsAppNotificationDateTime: whatsAppNotificationDateTime?.getTime(),
 					income,
 					expense,
 					suppliers,
@@ -77,32 +77,57 @@ export class UpdateEventController {
 			},
 		);
 
-		if (whatsAppNotificationDateTime && event.jobId) {
-			await agenda.cancel({
-				_id: event.jobId,
-			});
-
-			const job = await agenda.schedule(
-				whatsAppNotificationDateTime,
-				"notify-whatsapp-event-job",
-				{
-					eventId,
-					userId,
-				},
-			);
-
-			const jobId = job.attrs._id;
-
+		if (
+			event?.whatsAppNotificationDateTimes &&
+			whatsAppNotificationDateTimes?.length > 0
+		) {
 			await MongooseEventModel.updateOne(
 				{
 					_id: eventId,
 				},
 				{
 					$set: {
-						jobId,
+						whatsAppNotificationDateTimes: whatsAppNotificationDateTimes.map(
+							(date) => date.getTime(),
+						),
 					},
 				},
 			);
+		}
+
+		if (event?.jobIds && event.jobIds.length > 0) {
+			for (const jobId of event.jobIds) {
+				await agenda.cancel({ _id: jobId });
+			}
+
+			await MongooseEventModel.updateOne(
+				{ _id: eventId },
+				{ $set: { jobIds: [] } },
+			);
+		}
+
+		if (whatsAppNotificationDateTimes?.length > 0) {
+			for (const whatsAppNotificationDateTime of whatsAppNotificationDateTimes) {
+				if (isBefore(whatsAppNotificationDateTime, new Date())) {
+					continue;
+				}
+
+				const job = await agenda.schedule(
+					whatsAppNotificationDateTime,
+					"notify-whatsapp-event-job",
+					{
+						eventId,
+						userId,
+					},
+				);
+
+				const jobId = job.attrs._id;
+
+				await MongooseEventModel.updateOne(
+					{ _id: eventId },
+					{ $push: { jobIds: jobId } },
+				);
+			}
 		}
 
 		return response.status(HttpStatusCode.Ok).send();

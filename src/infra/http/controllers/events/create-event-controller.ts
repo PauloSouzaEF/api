@@ -11,7 +11,7 @@ const createEventBodySchema = z.object({
 	dateTime: z.coerce.date(),
 	address: z.string().min(1),
 	shouldNotifyWhatsappWhenNear: z.boolean(),
-	whatsAppNotificationDateTime: z.coerce.date().optional(),
+	whatsAppNotificationDateTimes: z.array(z.coerce.date()).default([]),
 	income: z.number().min(1),
 	expense: z.number().min(1),
 	suppliers: z.array(
@@ -33,7 +33,7 @@ export class CreateEventController {
 			dateTime,
 			address,
 			shouldNotifyWhatsappWhenNear,
-			whatsAppNotificationDateTime,
+			whatsAppNotificationDateTimes,
 			income,
 			expense,
 			suppliers,
@@ -51,12 +51,15 @@ export class CreateEventController {
 			return response.status(HttpStatusCode.NotFound).send();
 		}
 
+		const doesHaveNotificationDateTimes =
+			whatsAppNotificationDateTimes.length > 0;
+
 		const eventCreated = await MongooseEventModel.create({
 			name,
 			dateTime: dateTime.getTime(),
-			whatsAppNotificationDateTime:
-				whatsAppNotificationDateTime &&
-				new Date(whatsAppNotificationDateTime).getTime(),
+			whatsAppNotificationDateTimes: doesHaveNotificationDateTimes
+				? whatsAppNotificationDateTimes.map((dateTime) => dateTime.getTime())
+				: [],
 			address,
 			shouldNotifyWhatsappWhenNear,
 			income,
@@ -67,28 +70,24 @@ export class CreateEventController {
 
 		const eventId = eventCreated._id.toString();
 
-		if (whatsAppNotificationDateTime) {
-			const job = await agenda.schedule(
-				whatsAppNotificationDateTime,
-				"notify-whatsapp-event-job",
-				{
-					eventId,
-					userId,
-				},
-			);
-
-			const jobId = job.attrs._id;
-
-			await MongooseEventModel.updateOne(
-				{
-					_id: eventId,
-				},
-				{
-					$set: {
-						jobId,
+		if (doesHaveNotificationDateTimes) {
+			for (const whatsAppNotificationDateTime of whatsAppNotificationDateTimes) {
+				const job = await agenda.schedule(
+					whatsAppNotificationDateTime,
+					"notify-whatsapp-event-job",
+					{
+						eventId,
+						userId,
 					},
-				},
-			);
+				);
+
+				const jobId = job.attrs._id;
+
+				await MongooseEventModel.updateOne(
+					{ _id: eventId },
+					{ $push: { jobIds: jobId } },
+				);
+			}
 		}
 
 		return response.status(HttpStatusCode.Created).send();

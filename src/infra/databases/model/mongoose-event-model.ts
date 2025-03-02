@@ -13,11 +13,11 @@ export interface Event {
 	dateTime: Date;
 	address: string;
 	shouldNotifyWhatsappWhenNear: boolean;
-	whatsAppNotificationDateTime?: Date;
+	whatsAppNotificationDateTimes?: Date[];
 	suppliers: Supplier[];
 	income: number;
 	expense: number;
-	jobId?: Schema.Types.ObjectId;
+	jobIds?: Schema.Types.ObjectId[];
 	jobExecution?: Date;
 	accountId: Schema.Types.ObjectId;
 	createdAt: Date;
@@ -42,14 +42,14 @@ const eventSchema = new Schema<Event>({
 	income: { type: Number, required: true },
 	expense: { type: Number, required: true },
 	shouldNotifyWhatsappWhenNear: { type: Boolean, required: true },
-	whatsAppNotificationDateTime: { type: Date, required: false },
+	whatsAppNotificationDateTimes: { type: [Date], required: false },
 	dateTime: {
 		type: Date,
 		required: true,
 	},
 	suppliers: { type: [supplierSchema], required: true },
 	accountId: { type: Schema.Types.ObjectId, required: true, ref: "Account" },
-	jobId: { type: Schema.Types.ObjectId, required: false },
+	jobIds: { type: [Schema.Types.ObjectId], required: false },
 	jobExecution: { type: Date, required: false },
 	createdAt: {
 		type: Date,

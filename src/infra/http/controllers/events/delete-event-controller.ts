@@ -22,10 +22,10 @@ export class DeleteEventController {
 			return response.status(HttpStatusCode.NotFound).send();
 		}
 
-		if (event.jobId) {
-			await agenda.cancel({
-				_id: event.jobId,
-			});
+		if (event.jobIds?.length) {
+			for (const jobId of event.jobIds) {
+				await agenda.cancel({ _id: jobId });
+			}
 		}
 
 		await MongooseEventModel.deleteOne({ _id: eventId, accountId });

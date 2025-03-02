@@ -23,7 +23,7 @@ export class FindByIdEventController {
 			dateTime: event.dateTime,
 			address: event.address,
 			shouldNotifyWhatsappWhenNear: event.shouldNotifyWhatsappWhenNear,
-			whatsAppNotificationDateTime: event.whatsAppNotificationDateTime,
+			whatsAppNotificationDateTimes: event.whatsAppNotificationDateTimes,
 			suppliers: event.suppliers.map((supplier) => ({
 				name: supplier.name,
 				type: supplier.type,
