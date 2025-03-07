@@ -39,7 +39,7 @@ const supplierSchema = new Schema<Supplier>({
 	},
 });
 
-const SupplierModel =
+const MongoSupplierModel =
 	models.Supplier || model("Supplier", supplierSchema, "suppliers");
 
-export default SupplierModel as Model<Supplier>;
+export default MongoSupplierModel as Model<Supplier>;

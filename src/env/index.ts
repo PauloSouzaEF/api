@@ -6,11 +6,9 @@ dotenv.config({ path: ".env.local", override: true });
 import { z } from "zod";
 
 const envSchema = z.object({
+	NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 	MONGODB_URL: z.string().default(""),
 	JWT_SECRET: z.string().default(""),
-	FUNCTIONS_EMULATOR: z.string().default(""),
-	WHATSAPP_ACCESS_TOKEN: z.string().default(""),
-	WHATSAPP_PHONE_NUMBER_ID: z.string().default(""),
 });
 
 export const env = envSchema.parse(process.env);

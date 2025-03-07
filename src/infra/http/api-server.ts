@@ -13,6 +13,7 @@ import { agenda } from "../libs/agenda";
 import cors from "cors";
 import logError from "../libs/logger/log-error";
 import { wwebClient } from "../libs/wwebjs";
+import { env } from "@/env";
 
 dotenv.config();
 dotenv.config({ path: ".env.local", override: true });
@@ -35,7 +36,12 @@ export function getApiServerConfiguration() {
 		response.status(HttpStatusCode.Ok).json({ running: true }),
 	);
 
+	if (env.NODE_ENV === "development") {
+		app.use("/static", express.static("tmp"));
+	}
+
 	app.use(routes);
+
 
 	app.use((error: unknown, _request: Request, response: Response) => {
 		if (error instanceof ZodError) {

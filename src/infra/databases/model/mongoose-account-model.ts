@@ -33,7 +33,7 @@ const accountSchema = new Schema<Account>({
 	},
 });
 
-const AccountModel =
+const MongoAccountModel =
 	models.Account || model("Account", accountSchema, "accounts");
 
-export default AccountModel as Model<Account>;
+export default MongoAccountModel as Model<Account>;

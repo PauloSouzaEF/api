@@ -5,6 +5,7 @@ export interface User {
 	phoneNumber: string;
 	email: string;
 	passwordHash: string;
+	avatar?: string;
 	createdAt: Date;
 	updatedAt: Date;
 	deletedAt?: Date;
@@ -15,6 +16,7 @@ const userSchema = new Schema<User>({
 	phoneNumber: { type: String, required: true },
 	email: { type: String, required: true },
 	passwordHash: { type: String, required: true },
+	avatar: { type: String, required: false },
 	createdAt: {
 		type: Date,
 		default: Date.now,
@@ -28,6 +30,6 @@ const userSchema = new Schema<User>({
 	},
 });
 
-const UserModel = models.User || model("User", userSchema, "users");
+const MongoUserModel = models.User || model("User", userSchema, "users");
 
-export default UserModel as Model<User>;
+export default MongoUserModel as Model<User>;

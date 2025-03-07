@@ -64,6 +64,6 @@ const eventSchema = new Schema<Event>({
 	},
 });
 
-const EventModel = models.Event || model("Event", eventSchema, "events");
+const MongoEventModel = models.Event || model("Event", eventSchema, "events");
 
-export default EventModel as Model<Event>;
+export default MongoEventModel as Model<Event>;

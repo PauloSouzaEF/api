@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import EventModel from "@/infra/databases/model/mongoose-event-model";
+import MongoEventModel from "@/infra/databases/model/mongoose-event-model";
 import { getMonthsNames } from "@/utils/get-months-names";
 import { format } from "date-fns";
 import { Request, Response } from "express";
@@ -25,7 +25,7 @@ export class ReportsController {
 	}
 
 	private static async getLastFiveEvents() {
-		const events = await EventModel.find().sort({ dateTime: -1 }).limit(5);
+		const events = await MongoEventModel.find().sort({ dateTime: -1 }).limit(5);
 
 		return events.map((event) => ({
 			name: event.name,
@@ -34,7 +34,7 @@ export class ReportsController {
 	}
 
 	private static async getIncomeAndExpense() {
-		const events = await EventModel.find();
+		const events = await MongoEventModel.find();
 
 		const grossIncome = events.reduce((acc, event) => acc + event.income, 0);
 		const grossExpense = events.reduce((acc, event) => acc + event.expense, 0);
@@ -47,7 +47,7 @@ export class ReportsController {
 	}
 
 	private static async getEventsQuantityPerYear() {
-		const events = await EventModel.find();
+		const events = await MongoEventModel.find();
 
 		const eventsPerYear = new Set(
 			events.map((event) => event.dateTime.getFullYear()),
