@@ -1,11 +1,8 @@
 {
-	"editor.fontLigatures": true,
-	"editor.fontSize": 14,
-	"editor.lineHeight": 1.3,
-	"editor.fontFamily": "JetBrainsMono Nerd Font",
-	"editor.fontWeight": "300",
-	"editor.tabSize": 2,
-	"editor.insertSpaces": true,
-	"editor.minimap.enabled": false,
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"[typescript]": {
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	}
 }

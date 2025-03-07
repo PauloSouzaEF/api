@@ -1,7 +1,7 @@
-
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { env } from "@/env";
 import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
+import { S3Client } from "@/infra/libs/aws/s3";
 import type { Request, Response } from "express";
 
 export class MeController {
@@ -14,7 +14,7 @@ export class MeController {
 			return response.status(HttpStatusCode.NotFound).send();
 		}
 
-		const avatarUrl = this.getAvatarUrl(userId, user.avatar);
+		const avatarUrl = await this.getAvatarUrl(userId, user.avatar);
 
 		const userSerialized = {
 			id: user._id,
@@ -29,7 +29,7 @@ export class MeController {
 		return response.status(HttpStatusCode.Ok).send(userSerialized);
 	}
 
-	private static getAvatarUrl(userId: string, avatar?: string) {
+	private static async getAvatarUrl(userId: string, avatar?: string) {
 		if (!avatar) {
 			return "";
 		}
@@ -39,6 +39,8 @@ export class MeController {
 			return `${baseUrl}/static/${userId}/${avatar}`;
 		}
 
-		return ""
+		const s3FileUrl = await S3Client.getFileUrl(avatar);
+
+		return s3FileUrl;
 	}
 }

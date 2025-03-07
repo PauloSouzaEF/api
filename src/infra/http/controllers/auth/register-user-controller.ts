@@ -11,7 +11,7 @@ const registerUserBodySchema = z.object({
 	name: z.string().min(1),
 	email: z.string().email(),
 	password: z.string().min(6),
-	phoneNumber: z.string().min(11).max(11),
+	phoneNumber: z.string().min(11).max(15),
 });
 
 export class RegisterUserController {
