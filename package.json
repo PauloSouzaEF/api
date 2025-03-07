@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.758.0",
     "@aws-sdk/s3-request-presigner": "^3.758.0",
+    "@brazilian-utils/brazilian-utils": "^1.0.0-rc.12",
     "@date-fns/tz": "^1.2.0",
     "@hokify/agenda": "^6.3.0",
     "axios": "^1.7.9",

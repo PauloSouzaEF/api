@@ -5,6 +5,7 @@ import { MeController } from "../controllers/auth/me-controller";
 import { verifyAuthAndAccountMiddleware } from "../middlewares/verify-auth-and-account";
 import { UploadUserAvatarController } from "../controllers/auth/upload-user-avatar-controller";
 import { upload } from "@/infra/libs/multer";
+import { UpdateUserController } from "../controllers/auth/update-user-controller";
 
 export const authRouter = Router();
 
@@ -24,7 +25,9 @@ authRouter.patch(
 	"/me/avatar",
 	upload.single("avatar"),
 	verifyAuthAndAccountMiddleware,
-	(request, response) =>
-		UploadUserAvatarController.handle(request, response),
+	(request, response) => UploadUserAvatarController.handle(request, response),
 );
 
+authRouter.put("/me", verifyAuthAndAccountMiddleware, (request, response) =>
+	UpdateUserController.handle(request, response),
+);
