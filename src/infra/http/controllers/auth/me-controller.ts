@@ -1,8 +1,9 @@
 import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
-import { env } from "@/env";
+
 import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
-import { S3Client } from "@/infra/libs/aws/s3";
+import MongooseAccountModel from "@/infra/databases/model/mongoose-account-model";
 import type { Request, Response } from "express";
+import { getAvatarUrl } from "@/utils/get-avatar-url";
 
 export class MeController {
 	public static async handle(request: Request, response: Response) {
@@ -14,7 +15,18 @@ export class MeController {
 			return response.status(HttpStatusCode.NotFound).send();
 		}
 
-		const avatarUrl = await this.getAvatarUrl(userId, user.avatar);
+		const accounts = await MongooseAccountModel.find({ userId });
+
+		const accountsPayload = accounts.map((account) => {
+			return {
+				id: account._id,
+				name: account.name,
+				plan: account.plan,
+				createdAt: account.createdAt,
+			};
+		});
+
+		const avatarUrl = await getAvatarUrl(userId, user.avatar);
 
 		const userSerialized = {
 			id: user._id,
@@ -22,25 +34,11 @@ export class MeController {
 			email: user.email,
 			phoneNumber: user.phoneNumber,
 			avatarUrl,
+			accounts: accountsPayload,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 		};
 
 		return response.status(HttpStatusCode.Ok).send(userSerialized);
-	}
-
-	private static async getAvatarUrl(userId: string, avatar?: string) {
-		if (!avatar) {
-			return "";
-		}
-
-		if (env.NODE_ENV === "development") {
-			const baseUrl = "http://localhost:5000";
-			return `${baseUrl}/static/${userId}/${avatar}`;
-		}
-
-		const s3FileUrl = await S3Client.getFileUrl(avatar);
-
-		return s3FileUrl;
 	}
 }

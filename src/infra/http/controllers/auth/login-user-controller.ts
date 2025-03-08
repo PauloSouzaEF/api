@@ -2,6 +2,7 @@ import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { env } from "@/env";
 import MongooseAccountModel from "@/infra/databases/model/mongoose-account-model";
 import MongooseUserModel from "@/infra/databases/model/mongoose-user-model";
+import { getAvatarUrl } from "@/utils/get-avatar-url";
 import bcrypt from "bcrypt";
 import type { Request, Response } from "express";
 import jsonwebtoken from "jsonwebtoken";
@@ -35,7 +36,7 @@ export class LoginUserController {
 				.send({ message: "Invalid email or password!" });
 		}
 
-		const userId = user._id;
+		const userId = user._id.toString();
 		const expiresIn = rememberMe ? "7d" : "1d";
 
 		const token = jsonwebtoken.sign({ sub: userId }, env.JWT_SECRET, {
@@ -53,11 +54,14 @@ export class LoginUserController {
 			};
 		});
 
+		const avatarUrl = await getAvatarUrl(userId, user.avatar);
+
 		return response.status(HttpStatusCode.Ok).send({
 			id: userId,
 			name: user.name,
 			email: user.email,
 			phoneNumber: user.phoneNumber,
+			avatarUrl,
 			token,
 			createdAt: user.createdAt,
 			accounts: accountsPayload,

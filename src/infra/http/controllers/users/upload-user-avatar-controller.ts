@@ -29,7 +29,7 @@ export class UploadUserAvatarController {
 			});
 		}
 
-		const avatar = this.generateAvatarUniqueId(file.originalname);
+		const avatar = this.generateAvatarUniqueId(userId, file.originalname);
 
 		try {
 			await this.deleteOldAvatar(userId);
@@ -94,7 +94,7 @@ export class UploadUserAvatarController {
 		});
 	}
 
-	private static generateAvatarUniqueId(fileName: string) {
-		return `${Date.now()}_${fileName}`;
+	private static generateAvatarUniqueId(userId: string, fileName: string) {
+		return `${Date.now()}_${userId}_${fileName}`;
 	}
 }
