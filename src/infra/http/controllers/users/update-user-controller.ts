@@ -46,6 +46,7 @@ export class UpdateUserController {
 		user.name = name;
 		user.email = email;
 		user.phoneNumber = `55${phoneNumber}`;
+		user.updatedAt = new Date();
 
 		await user.save();
 

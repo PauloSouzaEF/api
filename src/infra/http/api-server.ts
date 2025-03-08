@@ -42,7 +42,6 @@ export function getApiServerConfiguration() {
 
 	app.use(routes);
 
-
 	app.use((error: unknown, _request: Request, response: Response) => {
 		if (error instanceof ZodError) {
 			const validationErrors = fromZodError(error);

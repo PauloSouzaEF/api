@@ -3,9 +3,9 @@ import { LoginUserController } from "../controllers/auth/login-user-controller";
 import { RegisterUserController } from "../controllers/auth/register-user-controller";
 import { MeController } from "../controllers/auth/me-controller";
 import { verifyAuthAndAccountMiddleware } from "../middlewares/verify-auth-and-account";
-import { UploadUserAvatarController } from "../controllers/auth/upload-user-avatar-controller";
+import { UploadUserAvatarController } from "../controllers/users/upload-user-avatar-controller";
 import { upload } from "@/infra/libs/multer";
-import { UpdateUserController } from "../controllers/auth/update-user-controller";
+import { UpdateUserController } from "../controllers/users/update-user-controller";
 
 export const authRouter = Router();
 
