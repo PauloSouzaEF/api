@@ -44,6 +44,7 @@ export class UploadUserAvatarController {
 
 			await MongoUserModel.findByIdAndUpdate(userId, {
 				avatar,
+				updatedAt: new Date(),
 			});
 		} catch (err) {
 			console.error(err);
