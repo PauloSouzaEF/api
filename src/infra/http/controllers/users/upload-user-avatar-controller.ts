@@ -2,6 +2,7 @@ import { HttpStatusCode } from "@/core/infra/enums/http-status-code";
 import { env } from "@/env";
 import MongoUserModel from "@/infra/databases/model/mongoose-user-model";
 import { S3Client } from "@/infra/libs/aws/s3";
+import { getAvatarUrl } from "@/utils/get-avatar-url";
 import type { Request, Response } from "express";
 import { mkdirSync, unlinkSync, writeFileSync } from "node:fs";
 
@@ -53,7 +54,11 @@ export class UploadUserAvatarController {
 			});
 		}
 
-		return response.status(HttpStatusCode.Ok).send();
+		const avatarUrl = await getAvatarUrl(userId, avatar);
+
+		return response.status(HttpStatusCode.Ok).send({
+			avatarUrl,
+		});
 	}
 
 	private static async deleteOldAvatar(userId: string) {
